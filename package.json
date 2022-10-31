@@ -1,0 +1,33 @@
+{
+  "name": "fim-interactive-dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ODCambodia/fim-interactive-dashboard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ODCambodia/fim-interactive-dashboard/issues"
+  },
+  "homepage": "https://github.com/ODCambodia/fim-interactive-dashboard#readme",
+  "dependencies": {
+    "bootstrap": "^4.6.2",
+    "crossfilter": "^1.3.12",
+    "d3": "^7.6.1",
+    "dc": "^4.2.7",
+    "dc-addons": "^0.13.5",
+    "dc-tableview": "^2.0.1",
+    "dc.leaflet": "^0.5.6",
+    "leaflet": "^1.9.2",
+    "leaflet-gesture-handling": "^1.2.2",
+    "leaflet-minimap": "^3.6.1",
+    "leaflet.markercluster": "^1.5.3"
+  }
+}

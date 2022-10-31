@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>dc.tableview - working with bootstrap</title>
+    <meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dc/2.1.8/dc.css">
+	<link rel="stylesheet" type="text/css" href="../build/dc-tableview.css">
+    <link rel="stylesheet" type="text/css" href="examples.css">
+</head>
+<body>
+  <div id="output"></div>
+	<div id="container0" class="chart-container"></div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.4.1/crossfilter.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dc/2.1.8/dc.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<script type="text/javascript" src="../build/dc-tableview.js"></script>
+<script type="text/javascript">
+var ndx;
+d3.csv("examples.csv", function(error, experiments) {
+    ndx = crossfilter(experiments);
+    var fmt = d3.format('02d');
+    var runDimension = ndx.dimension(function(d) {return [fmt(+d.Expt),fmt(+d.Run)];}),
+        grouping = function (d) { return d.Expt;};
+
+    var chart = dc.tableview("#container0", "group1");
+    chart
+        .dataSource(experiments)
+        .dimension(runDimension)
+        .group({})
+        .columns([
+            { title: "Experiment", data: "Expt" },
+            { title: "Run", data: "Run" },
+            { title: "Speed", data: "Speed" },
+        ])
+        .enableColumnReordering(true)
+        .enablePagingSizeChange(true)
+        .enableSearch(true)
+        .rowId("Expt")
+        .fixedHeader(true)
+		.buttons(["pdf", "csv", "excel", "print"])
+        .sortBy([["Expt", "desc"]])
+        .listeners({
+            rowClicked: function (row, data, index) {
+                var output = document.querySelector("#output");
+                output.innerHTML = "<b>Row " + index + " clicked:</b> " + JSON.stringify(data);
+            },
+            rowDblClicked: function (row, data, index) {
+                var output = document.querySelector("#output");
+                output.innerHTML = "<b>Row " + index + " double clicked:</b> " + JSON.stringify(data);
+            },
+            rowEnter: function (row, data, index) {
+                row.style.backgroundColor = "#eff9ff";
+            },
+            rowLeave: function (row, data, index) {
+                row.style.backgroundColor = "";
+            }
+        });
+
+    chart.render();
+  });
+</script>
+</body>
+</html>

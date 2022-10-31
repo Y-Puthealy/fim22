@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Dashboard | Foreign Investment</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    
+    <link rel='stylesheet' type='text/css' href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    
+    <link rel="stylesheet" type="text/css" href="node_modules/leaflet/dist/leaflet.css">
+    <link rel="stylesheet" type="text/css" href="node_modules/leaflet-minimap/dist/Control.MiniMap.min.css">
+    <link rel="stylesheet" type="text/css" href="node_modules/leaflet-gesture-handling/dist/leaflet-gesture-handling.min.css">
+    <link rel="stylesheet" type="text/css" href="node_modules/leaflet.markercluster/dist/MarkerCluster.css">
+    <link rel="stylesheet" type="text/css" href="node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css">
+    
+    <link rel="stylesheet" type="text/css" href="node_modules/dc/dist/style/dc.min.css">
+    <link rel="stylesheet" type="text/css" href="node_modules/dc-tableview/build/dc-tableview-bs.css">
+
+    <link rel='stylesheet' type='text/css' href='assets/css/main.css'>
+    <link rel='stylesheet' type='text/css' href='assets/css/dashboard.css'>
+</head>
+<body class="dashboard">
+    <!-- Image and text -->
+    <nav class="navbar navbar-dark" style="background: #06323d;">
+        <a class="navbar-brand" href="#">
+            <!-- <img src="/docs/4.6/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt=""> -->
+            Foreign Investment Mapping
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Interactive Dashboard<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/timeline.html">Timeline</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <h1>Interactive Dashboard</h1>
+        <br>
+        <div class="chart-wrapper">
+            <div class="chart-stage">
+                <div class="dc-datatable-count">
+                    Selecting <span class="filter-count"></span> of <span class="total-count"></span> records
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4 px-1">
+                <div class="chart-wrapper">
+                    <div class="chart-stage">
+                        <div class="chart-title">
+                            <span>
+                                <strong>Projects Map</strong>
+                            </span>
+                            <span>
+                                <a class="reset" style="display:none" href="javascript:projectsByCoordinateMapChart.filterAll(); dc.redrawAll();">
+                                    reset
+                                </a>
+                            </span>
+                        </div>
+                        <!-- Leaflet Map -->
+                        <div class="map" id="fim-map"></div>
+                        <div id="culster-map-anchor"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-lg-12 px-1">
+                        <div class="chart-wrapper">
+                            <div class="chart-stage">
+                                <div class="chart-title">
+                                    <span>
+                                        <strong>
+                                            Projects by Province
+                                        </strong>
+                                    </span>
+                                    <span>
+                                        <a class="reset" style="display:none" href="javascript:projectsByProvincePieChart.filterAll(); dc.redrawAll();">
+                                            reset
+                                        </a>
+                                    </span>
+                                </div>
+                                <!-- Pie Chart: Number of Project By Province -->                                
+                                <div id="projects-by-province-pie-chart"></div>
+                                <div class="province-legend"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 px-1">
+                        <div class="chart-wrapper">
+                            <div class="chart-stage">
+                                <div class="chart-title">
+                                    <span>
+                                        <strong>
+                                            Volume of Investment by Nationality <small><a id="investment_mm">reset</a></small>
+                                        </strong>
+                                    </span>
+                                    <div class="dc-chart" id="chart-ring-nationality"></div>
+                                    
+                                    <span>
+                                        <a class="reset" style="display:none" href="javascript:investmentByNationalityRowChart.filterAll(); dc.redrawAll();">
+                                            reset
+                                        </a>
+                                    </span>
+                                </div>
+                                <!-- Row Chart: Size of Investment by Nationality -->                                
+                                <!-- <div id="investment-by-nationality-row-chart"></div> -->
+                                
+                                
+                                <!-- <div id="investment-by-nationality-bubble-chart"></div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-lg-12 px-1">
+                        <div class="chart-wrapper">
+                            <div class="chart-stage">
+                                <div class="chart-title">
+                                    <span>
+                                        <strong>
+                                            Projects by Sector
+                                        </strong>
+                                    </span>
+                                    <span>
+                                        <a class="reset" style="display:none" href="javascript:projectsBySectorPieChart.filterAll(); dc.redrawAll();">
+                                            reset
+                                        </a>
+                                    </span>
+                                </div>
+                                <!-- Pie Chart: Number of Projects by Sectors -->
+                                <div id="projects-by-sector-pie-chart"></div>
+                                <div class="sector-legend"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 px-1">
+                        <div class="chart-wrapper">
+                            <div class="chart-stage">
+                                <div class="chart-title">
+                                    <span>
+                                        <strong>
+                                            Volume Investment by Sectors
+                                        </strong>
+                                    </span>
+                                    <span>
+                                        <a class="reset" style="display:none" href="javascript:investmentBySectorRowChart.filterAll(); dc.redrawAll();">
+                                            reset
+                                        </a>
+                                    </span>
+                                </div>
+                                <!-- Row: Volume of Investment by Sectors -->
+                                <div id="chart-ring-sector"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <!-- Data Table -->
+            <div class="col-lg-12">
+                <strong>Table of Investment Project</strong>
+                <div id="fim-datatable"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script type="text/javascript" src="node_modules/leaflet/dist/leaflet.js"></script>
+    <script type="text/javascript" src="node_modules/leaflet-minimap/dist/Control.MiniMap.min.js"></script>
+    <script type="text/javascript" src="node_modules/leaflet-gesture-handling/dist/leaflet-gesture-handling.min.js"></script>
+    <script type="text/javascript" src="node_modules/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+
+    <script type="text/javascript" src="node_modules/d3/dist/d3.min.js"></script>
+    <script type="text/javascript" src="node_modules/crossfilter/crossfilter.min.js"></script>
+    <script type="text/javascript" src="node_modules/dc/dist/dc.min.js"></script>
+    <script type="text/javascript" src="node_modules/dc-tableview/build/dc-tableview-bs.js"></script>
+
+    <script type="text/javascript" src="node_modules/dc.leaflet/dc.leaflet.min.js"></script>
+    <script type="text/javascript" src="node_modules/dc-addons/dist/bubble-cloud/dc-bubble-cloud.min.js"></script>
+
+    <script type="text/javascript" src="assets/js/map.js"></script>
+    <script type="text/javascript" src="assets/js/charts.js"></script>
+    <script type="text/javascript" src="assets/js/main.js"></script>
+</body>
+</html>
